@@ -53,17 +53,34 @@ chat/
 
 ## Running it
 
-Market data is **not** included (size and data licences). Download it into `data/`:
+The input data is included in `data/` (≈ 310 MB), so the notebooks run straight after cloning:
 
 ```bash
+git clone https://github.com/tusharnmims/pca-forex-analysis.git
+cd pca-forex-analysis
 pip install -r requirements.txt
+jupyter notebook          # open pca/ or backtesting/ and run all cells
+```
+
+Open the notebooks from inside their folder (`pca/` or `backtesting/`): they load the code from `../src` and the data from `../data`. Results (`data/backtest`, `data/regime`, …) are recreated when the notebooks run.
+
+| Folder | Contents | Source |
+|---|---|---|
+| `data/histdata_fx/` | hourly OHLC 2010 – Oct 2026: 11 majors/metals, 23 crosses, plus `currencies_1h.csv` and `crosses_1h.csv` | HistData.com (UTC) |
+| `data/histdata/` | hourly gold, silver, synthetic USD index | HistData.com |
+| `data/mt5/` | hourly gold, silver, USD index panel 2019 – 2026 | Vantage MT5 |
+| `data/mt5_fx/` | per-bar spreads of the crosses 2019 – 2026, swap rates | Vantage MT5 |
+
+To refresh or extend the data yourself:
+
+```bash
 python src/fetch_fx_histdata.py --start 2010-01-01      # HistData hourly: 11 majors/metals + 23 crosses
 python src/fetch_data.py --source mt5                   # gold/silver/USD panel from a logged-in MT5 terminal
 python src/fetch_fx_mt5.py                              # per-bar spreads from MT5 (2019+)
 python src/fetch_swaps_mt5.py                           # current swap rates from MT5
 ```
 
-The MT5 scripts need the `MetaTrader5` package and a running, logged-in MetaTrader 5 terminal (Windows); they only read data. Set `MT5_PATH` in `src/fetch_data.py` to your terminal. Then open the notebooks in `pca/` and `backtesting/` (they add `../src` to the path) or run the scripts directly, e.g. `python src/regime_analysis.py`.
+The MT5 scripts need the `MetaTrader5` package and a running, logged-in MetaTrader 5 terminal (Windows); they only read data. Set `MT5_PATH` in `src/fetch_data.py` to your terminal.
 
 To rebuild the deck: `python presentation/export_data.py`, then `npm install` and `node build_deck.js` inside `presentation/`.
 

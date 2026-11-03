@@ -1,5 +1,12 @@
-# market data is downloaded locally (see README) and not redistributed
-data/
+# input data is committed; results are recreated by the notebooks
+data/*
+!data/histdata_fx/
+!data/histdata/
+!data/mt5/
+!data/mt5_fx/
+data/mt5_fx/*
+!data/mt5_fx/crosses_1h.csv
+!data/mt5_fx/swaps.csv
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
