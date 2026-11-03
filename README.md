@@ -37,6 +37,9 @@ src/                     shared Python code used by the notebooks
 presentation/
   PCA_Forex_Analysis.pptx        26-slide deck of the study
   export_data.py, build_deck.js  rebuild the deck from the analysis outputs
+chat/
+  conversation.md                readable record of the working session with Claude
+  claude_session_sanitized.zip   full session transcript (images, account details and private strategy removed)
 ```
 
 ## Method in short
