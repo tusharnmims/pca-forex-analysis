@@ -18,6 +18,8 @@ Conclusion: **PCA tells us when not to trust relationships between currency pair
 
 ## Repository layout
 
+Every notebook is self-contained: all code is written out in its cells (one cell per function or step), with no project `.py` files to import.
+
 ```
 pca/                     analysis notebooks (charts and outputs saved inside)
   01_gold_silver_pca.ipynb       why the PCA pullback fails for gold vs silver
@@ -29,14 +31,14 @@ backtesting/             strategy backtests (charts and outputs saved inside)
   03_forex_h1_walk_forward.ipynb hourly walk-forward (train 2019-22, test 2023+)
   04_forex_daily_walk_forward.ipynb  D1 / H4 walk-forward (train 2010-18, test 2019+), 8 and 23 crosses
   05_swap_sensitivity.ipynb      effect of swap assumptions on the daily setup
-src/                     shared Python code used by the notebooks
-  fetch_*.py, compare_oanda_histdata.py    data download and validation
-  fx_pca_strategy.py, pca_strategy.py      PCA residual model, s-score, backtest engine
-  tf_strategy.py, walk_forward.py, ...     walk-forward tests
-  gold_silver_analysis.py, forex_analysis.py, regime_analysis.py   analysis behind pca/
+data_collection/         download notebooks (stored without outputs; the data is already in data/)
+  01_download_histdata.ipynb     HistData hourly prices, 11 majors/metals + 23 crosses, gold/silver panel
+  02_download_mt5.ipynb          MetaTrader 5: gold/silver/USD panel, per-bar spreads, swap rates
+  03_compare_oanda_histdata.ipynb  data check: OANDA (TradingView) vs HistData gold 1-minute
+data/                    input data (prices, spreads, swaps); results are written here when notebooks run
 presentation/
   PCA_Forex_Analysis.pptx        26-slide deck of the study
-  export_data.py, build_deck.js  rebuild the deck from the analysis outputs
+  export_data.ipynb, build_deck.js  rebuild the deck from the analysis outputs
 chat/
   conversation.md                readable record of the working session with Claude
   claude_session_sanitized.zip   full session transcript (images, account details and private strategy removed)
@@ -62,7 +64,7 @@ pip install -r requirements.txt
 jupyter notebook          # open pca/ or backtesting/ and run all cells
 ```
 
-Open the notebooks from inside their folder (`pca/` or `backtesting/`): they load the code from `../src` and the data from `../data`. Results (`data/backtest`, `data/regime`, …) are recreated when the notebooks run.
+Open the notebooks from inside their folder (`pca/` or `backtesting/`): they read the data from `../data`. Results (`data/backtest`, `data/regime`, …) are recreated when the notebooks run.
 
 | Folder | Contents | Source |
 |---|---|---|
@@ -71,18 +73,9 @@ Open the notebooks from inside their folder (`pca/` or `backtesting/`): they loa
 | `data/mt5/` | hourly gold, silver, USD index panel 2019 – 2026 | Vantage MT5 |
 | `data/mt5_fx/` | per-bar spreads of the crosses 2019 – 2026, swap rates | Vantage MT5 |
 
-To refresh or extend the data yourself:
+To refresh or extend the data yourself, run the notebooks in `data_collection/`. The MT5 one needs the `MetaTrader5` package and a running, logged-in MetaTrader 5 terminal (Windows); it only reads data. Set `MT5_PATH` in it to your terminal.
 
-```bash
-python src/fetch_fx_histdata.py --start 2010-01-01      # HistData hourly: 11 majors/metals + 23 crosses
-python src/fetch_data.py --source mt5                   # gold/silver/USD panel from a logged-in MT5 terminal
-python src/fetch_fx_mt5.py                              # per-bar spreads from MT5 (2019+)
-python src/fetch_swaps_mt5.py                           # current swap rates from MT5
-```
-
-The MT5 scripts need the `MetaTrader5` package and a running, logged-in MetaTrader 5 terminal (Windows); they only read data. Set `MT5_PATH` in `src/fetch_data.py` to your terminal.
-
-To rebuild the deck: `python presentation/export_data.py`, then `npm install` and `node build_deck.js` inside `presentation/`.
+To rebuild the deck: run `presentation/export_data.ipynb`, then `npm install` and `node build_deck.js` inside `presentation/`.
 
 ## Limits
 
