@@ -1,0 +1,7 @@
+# market data is downloaded locally (see README) and not redistributed
+data/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+presentation/node_modules/
+presentation/package-lock.json

@@ -1,0 +1,6 @@
+numpy
+pandas
+matplotlib
+requests
+MetaTrader5      # optional: spreads, swaps and gold/silver panel from an MT5 terminal (Windows)
+jupyter
